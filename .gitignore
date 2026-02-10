@@ -1,0 +1,41 @@
+# === Python кэш ===
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# === IDE ===
+.vscode/
+.idea/
+
+# === Бинарные файлы/драйверы ===
+*.exe
+chromedriver*
+geckodriver*
+msedgedriver*
+
+# === Системные файлы ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === Allure отчеты ===
+/allure-results/
+/allure-report/
+
+# === Файлы окружения ===
+venv/
+.env
+.env.local
+*.key
+*.pem
+credentials.py
+config.ini
+secrets.ini
+
+# База данных (локальная)
+*.db
+*.sqlite3
+
+# Logs
+logs/
+*.log
