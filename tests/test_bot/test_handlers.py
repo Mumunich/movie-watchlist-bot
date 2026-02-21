@@ -97,9 +97,10 @@ async def test_cmd_start_existing_user(mock_message, mock_state):
             api_client, "get_current_user", new=AsyncMock(return_value=existing_user)
         ):
             with allure.step("Вызвать хендлер cmd_start"):
-                await cmd_start(mock_message, mock_state)
+                await cmd_start(mock_message)
 
     with allure.step("Проверить, что бот отправил приветствие"):
+        mock_message.answer.assert_called_once()
         mock_message.answer.assert_called_once()
         args, kwargs = mock_message.answer.call_args
         assert "Добро пожаловать" in args[0]
