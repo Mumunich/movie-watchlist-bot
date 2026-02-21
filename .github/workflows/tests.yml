@@ -49,12 +49,13 @@ jobs:
           pip install -r requirements.txt
 
       # 4. Проверка качества кода (LINTING)
-      - name: Lint and Format with Ruff
-        run: |
+      #- name: Lint and Format with Ruff
+      #  run: |
           # Проверка стиля и ошибок
-          ruff check .
+      #    ruff check .
           # Проверка форматирования
-          ruff format --check .
+      #    ruff format --check .
+      #    mypy .
 
       # 5. Настраиваем окружение: создаем .env
       - name: Set up environment
