@@ -1,12 +1,19 @@
 import os
+
 import httpx
-import json
-from dotenv import load_dotenv
-from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, InputMediaPhoto
 from aiogram.fsm.context import FSMContext
-from api.database import AsyncSessionLocal
-from api.models import Movie
+from aiogram.types import (
+    CallbackQuery,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    InputMediaPhoto,
+    Message,
+)
+from dotenv import load_dotenv
+
+from api.core.models import Movie
 from bot.logger import logger
+from bot.services.api_client import api_client
 
 # Импортируем общий сервис
 from bot.services.movie_service import movie_service
@@ -21,17 +28,16 @@ POSTER_PLACEHOLDER_URL = os.getenv("POSTER_PLACEHOLDER_URL")
 async def get_movie(title: str) -> dict | None:
     """Получает список фильмов по названию из Кинопоиска"""
     params = {"query": title, "limit": 3}
-    headers = {
-        "X-API-KEY": KINOPOISK_API_KEY,
-        "accept": "application/json"
-    }
+    headers = {"X-API-KEY": KINOPOISK_API_KEY, "accept": "application/json"}
 
     logger.info(f"Поиск фильма:: {title}")
     logger.info(f"URL: {BASE_URL}movie/search")
 
     async with httpx.AsyncClient(timeout=15.0) as client:
         try:
-            response = await client.get(f"{BASE_URL}movie/search", headers=headers, params=params)
+            response = await client.get(
+                f"{BASE_URL}movie/search", headers=headers, params=params
+            )
             logger.info(f"Ответ от Кинопоиска (фильм): статус {response.status_code}")
             response.raise_for_status()
 
@@ -45,21 +51,22 @@ async def get_movie(title: str) -> dict | None:
             logger.error(f"Ошибка HTTP: {e.response.status_code} — {e.response.text}")
             return None
         except Exception as e:
-            logger.error(f"Критическая ошибка при поиске фильма '{title}': {e}", exc_info=True)
+            logger.error(
+                f"Критическая ошибка при поиске фильма '{title}': {e}", exc_info=True
+            )
             return None
 
 
 async def fetch_genres_from_kinopoisk() -> list[dict] | None:
     """Получает список всех жанров из Кинопоиска"""
-    headers = {
-        "X-API-KEY": KINOPOISK_API_KEY,
-        "accept": "application/json"
-    }
+    headers = {"X-API-KEY": KINOPOISK_API_KEY, "accept": "application/json"}
 
     url = f"{ALT_API_URL}movie/possible-values-by-field?field=genres.name"
     logger.info(f"Запрос жанров из Кинопоиска по URL: {url}")
 
-    timeout = httpx.Timeout(30.0, connect=10.0)  # ← 30 секунд на запрос, 10 на соединение
+    timeout = httpx.Timeout(
+        30.0, connect=10.0
+    )  # ← 30 секунд на запрос, 10 на соединение
 
     async with httpx.AsyncClient(timeout=timeout) as client:
         try:
@@ -77,14 +84,13 @@ async def fetch_genres_from_kinopoisk() -> list[dict] | None:
 
 async def fetch_types_from_kinopoisk() -> list[dict] | None:
     """Получает список всех тип медиа-контента из Кинопоиска"""
-    headers = {
-        "X-API-KEY": KINOPOISK_API_KEY,
-        "accept": "application/json"
-    }
+    headers = {"X-API-KEY": KINOPOISK_API_KEY, "accept": "application/json"}
 
     url = f"{ALT_API_URL}movie/possible-values-by-field?field=type"
     logger.info(f"Запрос типов из Кинопоиска по URL: {url}")
-    timeout = httpx.Timeout(30.0, connect=10.0)  # ← 30 секунд на запрос, 10 на соединение
+    timeout = httpx.Timeout(
+        30.0, connect=10.0
+    )  # ← 30 секунд на запрос, 10 на соединение
 
     async with httpx.AsyncClient(timeout=timeout) as client:
         try:
@@ -106,20 +112,25 @@ async def get_random_title(type_name: str, genre: str) -> dict | None:
         "type": type_name,
         "genres.name": genre,
         "notNullFields": [
-            "id", "name", "description", "type", "year",
-            "rating.kp", "genres.name", "poster.url"
-        ]
+            "id",
+            "name",
+            "description",
+            "type",
+            "year",
+            "rating.kp",
+            "genres.name",
+            "poster.url",
+        ],
     }
-    headers = {
-        "X-API-KEY": KINOPOISK_API_KEY,
-        "accept": "application/json"
-    }
+    headers = {"X-API-KEY": KINOPOISK_API_KEY, "accept": "application/json"}
 
     logger.info(f"🎲 Поиск случайного фильма: тип={type_name}, жанр={genre}")
 
     async with httpx.AsyncClient(timeout=10.0) as client:
         try:
-            response = await client.get(f"{BASE_URL}movie/random", headers=headers, params=params)
+            response = await client.get(
+                f"{BASE_URL}movie/random", headers=headers, params=params
+            )
             logger.info(f"Статус ответа random: {response.status_code}")
             response.raise_for_status()
 
@@ -137,7 +148,9 @@ async def get_random_title(type_name: str, genre: str) -> dict | None:
             return None
 
 
-async def send_movie_card_with_nav(message: Message, movie: Movie, index: int, total: int) -> None:
+async def send_movie_card_with_nav(
+    message: Message, movie: Movie, index: int, total: int
+) -> None:
     """Отправляет карточку фильма с постером и инлайн-кнопками"""
     caption = build_movie_caption(movie)
 
@@ -145,18 +158,23 @@ async def send_movie_card_with_nav(message: Message, movie: Movie, index: int, t
     nav_row = []
     if index > 0:
         nav_row.append(InlineKeyboardButton(text="◀️", callback_data="info_nav_prev"))
-    nav_row.append(InlineKeyboardButton(text=f"{index + 1}/{total}", callback_data="noop"))
     if index < total - 1:
         nav_row.append(InlineKeyboardButton(text="▶️", callback_data="info_nav_next"))
 
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [
-            InlineKeyboardButton(text="✅ Просмотрено", callback_data=f"mark_watched_{movie.id}"),
-            InlineKeyboardButton(text="🗑️ Удалить", callback_data=f"delete_movie_{movie.id}")
-        ],
-        nav_row,
-        [InlineKeyboardButton(text="❌ Закрыть", callback_data="info_close")]
-    ])
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="✅ Просмотрено", callback_data=f"mark_watched_{movie.id}"
+                ),
+                InlineKeyboardButton(
+                    text="🗑️ Удалить", callback_data=f"delete_movie_{movie.id}"
+                ),
+            ],
+            nav_row,
+            [InlineKeyboardButton(text="❌ Закрыть", callback_data="info_close")],
+        ]
+    )
 
     poster_to_use = movie.poster_url or POSTER_PLACEHOLDER_URL
     try:
@@ -164,15 +182,17 @@ async def send_movie_card_with_nav(message: Message, movie: Movie, index: int, t
             photo=poster_to_use,
             caption=caption,
             reply_markup=keyboard,
-            parse_mode="HTML"
+            parse_mode="HTML",
         )
     except Exception as e:
         logger.error(f"Ошибка при отправке тайтла с навигацией: {e}")
         await message.answer(caption, reply_markup=keyboard, parse_mode="HTML")
 
 
-async def navigate_info_movie(callback: CallbackQuery, state: FSMContext, direction: int):
-    """Навигация по карточкам фильмов"""
+async def navigate_info_movie(
+    callback: CallbackQuery, state: FSMContext, direction: int
+):
+    """Навигация по карточкам фильмов через API"""
     data = await state.get_data()
     movie_ids = data["movie_ids"]
     current_index = data["current_index"]
@@ -183,15 +203,36 @@ async def navigate_info_movie(callback: CallbackQuery, state: FSMContext, direct
         return
 
     movie_id = movie_ids[new_index]
-    async with AsyncSessionLocal() as session:
-        movie = await session.get(Movie, movie_id)
-        if not movie:
+
+    # Получаем фильм через Api
+    try:
+        movie_data = await api_client.get_movie(callback.from_user.id, movie_id)
+        if not movie_data:
             await callback.answer("Фильм удалён.")
             return
 
-    await state.update_data(current_index=new_index)
-    await edit_movie_card(callback.message, movie, new_index, len(movie_ids))
-    await callback.answer()
+        # Создаём временный объект Movie для send_movie_card
+        from api.core.models import Movie
+
+        temp_movie = Movie(
+            id=movie_data["id"],
+            title=movie_data["title"],
+            year=movie_data.get("year"),
+            type=movie_data.get("type", "movie"),
+            description=movie_data.get("description"),
+            poster_url=movie_data.get("poster_url"),
+            rating=movie_data.get("rating"),
+            genres=movie_data.get("genres", ""),
+            watched=movie_data.get("watched", False),
+        )
+
+        await state.update_data(current_index=new_index)
+        await edit_movie_card(callback.message, temp_movie, new_index, len(movie_ids))
+        await callback.answer()
+
+    except Exception as e:
+        logger.error(f"Ошибка навигации: {e}")
+        await callback.answer("❌ Ошибка загрузки фильма")
 
 
 async def edit_movie_card(message: Message, movie: Movie, index: int, total: int):
@@ -201,18 +242,23 @@ async def edit_movie_card(message: Message, movie: Movie, index: int, total: int
     nav_row = []
     if index > 0:
         nav_row.append(InlineKeyboardButton(text="◀️", callback_data="info_nav_prev"))
-    nav_row.append(InlineKeyboardButton(text=f"{index + 1}/{total}", callback_data="noop"))
     if index < total - 1:
         nav_row.append(InlineKeyboardButton(text="▶️", callback_data="info_nav_next"))
 
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [
-            InlineKeyboardButton(text="✅ Просмотрено", callback_data=f"mark_watched_{movie.id}"),
-            InlineKeyboardButton(text="🗑️ Удалить", callback_data=f"delete_movie_{movie.id}")
-        ],
-        nav_row,
-        [InlineKeyboardButton(text="❌ Закрыть", callback_data="info_close")]
-    ])
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="✅ Просмотрено", callback_data=f"mark_watched_{movie.id}"
+                ),
+                InlineKeyboardButton(
+                    text="🗑️ Удалить", callback_data=f"delete_movie_{movie.id}"
+                ),
+            ],
+            nav_row,
+            [InlineKeyboardButton(text="❌ Закрыть", callback_data="info_close")],
+        ]
+    )
 
     poster_to_use = movie.poster_url or POSTER_PLACEHOLDER_URL
     try:
@@ -220,7 +266,9 @@ async def edit_movie_card(message: Message, movie: Movie, index: int, total: int
         await message.edit_media(media=media, reply_markup=keyboard)
     except Exception as e:
         logger.error(f"Ошибка при редактировании карточки тайтла с навигацией: {e}")
-        await message.edit_caption(caption=caption, reply_markup=keyboard, parse_mode="HTML")
+        await message.edit_caption(
+            caption=caption, reply_markup=keyboard, parse_mode="HTML"
+        )
 
 
 def build_movie_caption(movie: Movie) -> str:

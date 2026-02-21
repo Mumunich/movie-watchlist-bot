@@ -1,6 +1,5 @@
 import logging
 import sys
-import os
 from pathlib import Path
 
 
@@ -27,8 +26,8 @@ def setup_logger(name: str = "movie_bot") -> logging.Logger:
 
     # Формат сообщений
     formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
     )
 
     # 1. Вывод в консоль (StreamHandler)
@@ -43,19 +42,13 @@ def setup_logger(name: str = "movie_bot") -> logging.Logger:
     logs_dir.mkdir(exist_ok=True)
 
     # Файл для всех логов
-    file_handler = logging.FileHandler(
-        logs_dir / "movie_bot.log",
-        encoding='utf-8'
-    )
+    file_handler = logging.FileHandler(logs_dir / "movie_bot.log", encoding="utf-8")
     file_handler.setLevel(logging.DEBUG)  # В файл пишем всё (DEBUG и выше)
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
 
     # Файл для ошибок (только ERROR и CRITICAL)
-    error_handler = logging.FileHandler(
-        logs_dir / "errors.log",
-        encoding='utf-8'
-    )
+    error_handler = logging.FileHandler(logs_dir / "errors.log", encoding="utf-8")
     error_handler.setLevel(logging.ERROR)  # Только ошибки
     error_handler.setFormatter(formatter)
     logger.addHandler(error_handler)

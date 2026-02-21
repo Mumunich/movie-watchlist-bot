@@ -1,5 +1,8 @@
+# Оркестратор контейнеров
 version: "3.8"
+
 services:
+  # ===== 1. База данных PostgreSQL =====
   db:
     image: postgres:17-alpine
     container_name: movie_db_container
@@ -9,9 +12,82 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     ports:
-      - ${DB_PORT}:5432
+      - "${DB_PORT}:5432"
     volumes:
+      # Сохраняем данные из БД на жесткий диск
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      # Задаем название локальной сети для контейнеров
+      - movie_network
+    env_file:
+      - .env
+
+  # ===== 2. FastAPI бэкенд =====
+  api:
+    # Сбор образ из Dockerfile в текущей папке
+    build: .
+    container_name: movie_api_container
+    restart: always
+    # Проброс порта
+    ports:
+      - "8000:8000"
+    depends_on:
+      # Ожидаем когда пройдёт проверка healthy (готовности) базы данных
+      db:
+        condition: service_healthy
+    networks:
+      - movie_network
+    env_file:
+      - .env
+    environment:
+      # Внутри Docker-сети хост базы — 'db'
+      DATABASE_URL: postgresql+asyncpg://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+    volumes:
+      # синхронизацию папки с кодом, что бы изменения в БД мгновенно производили миграцию и что бы версия алембика появилась на компе
+      #Изменение кода на компе, изменяет его в контейнере
+      #Создание объектов состояния БД в контейнере, создаёт его и на компе.
+      - .:/app
+      - ./logs:/app/logs
+    # Команда запуска скрипта в консоли, чтобы создать таблицы в базе данных (если их нет), потом запуск сервера для FastAPI. Миграции через Alembic
+    command: |
+      sh -c "
+      echo '📜 Применяем миграции Alembic...' &&
+      alembic upgrade head &&
+      echo '🚀 Запускаем FastAPI...' &&
+      uvicorn api.main:app --host 0.0.0.0 --port 8000
+      "
+
+  # ===== 3. Telegram Bot =====
+  bot:
+    build: .
+    container_name: movie_bot_container
+    restart: always
+    depends_on:
+      # Ожидаем когда запустится Api
+      api:
+        condition: service_started
+    networks:
+      - movie_network
+    env_file:
+      - .env
+    environment:
+      API_URL: http://api:8000
+    volumes:
+      # синхронизацию папки с кодом, что бы код появлялся в контейнере сразу же
+      - .:/app
+      - ./logs:/app/logs
+    # Запускаем бота
+    command: python -m bot.main
+
+networks:
+  movie_network:
+    driver: bridge
 
 volumes:
-  postgres_data: null
+  postgres_data:
+    name: movie_bot_data

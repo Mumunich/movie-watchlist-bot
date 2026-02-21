@@ -1,6 +1,6 @@
-from sqlalchemy import select, delete
-from api.database import AsyncSessionLocal
-from api.models import Movie, Genre, Types
+from sqlalchemy import delete, select
+from api.core.database import AsyncSessionLocal
+from api.core.models import Genre, Movie, Types
 from bot.logger import logger
 
 
@@ -13,7 +13,10 @@ class MovieService:
             logger.error("Данные для парсинга пусты")
             return None
 
-        logger.info(f"📊 Парсинг данных, тип: {type(data).__name__}, ключи: {list(data.keys())[:5] if isinstance(data, dict) else 'не словарь'}")
+        logger.info(
+            f"📊 Парсинг данных, тип:{type(data).__name__}, "
+            f"ключи:{list(data.keys())[:5] if isinstance(data, dict) else 'не словарь'}"
+        )
 
         if isinstance(data, dict):
             if "docs" in data and isinstance(data["docs"], list):
@@ -30,12 +33,10 @@ class MovieService:
             logger.error(f"Ожидается словарь, получено: {type(data)}")
             return None
 
-        # Проверяем обязательные поля
-        if not movie.get("id"):
-            logger.error("Нет ID фильма")
-            return None
-
-        logger.info(f"Обрабатываем фильм: {movie.get('name', 'Без названия')} (id={movie.get('id')})")
+        logger.info(
+            f"Обрабатываем фильм: {movie.get('name', 'Без названия')} "
+            f"(id={movie.get('id')})"
+        )
 
         # Извлечение данных
         title = movie.get("name") or movie.get("alternativeName") or "Без названия"
@@ -46,7 +47,7 @@ class MovieService:
         # Обработка описания
         description = movie.get("description")
         if description:
-            description = description.replace('\xa0', ' ')
+            description = description.replace("\xa0", " ")
             if len(description) > 900:
                 description = description[:900] + "..."
 
@@ -78,7 +79,7 @@ class MovieService:
             "description": description,
             "poster_url": poster_url,
             "rating": rating,
-            "genres": genres_str
+            "genres": genres_str,
         }
 
         logger.info(f"Парсинг завершен: {title}")
@@ -92,6 +93,7 @@ class MovieService:
             raise ValueError("Нет данных фильма для сохранения")
 
         async with AsyncSessionLocal() as session:
+            # Проверяем что фильм уже есть в БД
             existing = await session.execute(
                 select(Movie).where(Movie.kp_id == movie_data["kp_id"])
             )
@@ -108,7 +110,7 @@ class MovieService:
                 description=movie_data["description"],
                 poster_url=movie_data["poster_url"],
                 rating=movie_data["rating"],
-                genres=movie_data["genres"]
+                genres=movie_data["genres"],
             )
             session.add(new_movie)
             await session.commit()

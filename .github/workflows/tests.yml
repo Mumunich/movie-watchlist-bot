@@ -1,0 +1,116 @@
+# Название всего процесса, которое будет отображаться во вкладке Actions на GitHub
+name: Run tests
+
+# События-триггеры
+on:
+  push:
+    branches: [ main, develop ]   # При каждом пуше в эти ветки
+  pull_request:
+    branches: [ main ]            # При создании PR в ветку main
+
+jobs:
+  # Название работы
+  test:
+    # На какой ОС запускать тесты
+    runs-on: ubuntu-latest
+
+    # Вспомогательные контейнеры
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        # Проверка "здоровья" БД
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Проброс порта из контейнера наружу
+          - 5432:5432
+
+    steps:
+      # 1. Копируем код репозитория в виртуальную машину
+    - uses: actions/checkout@v3
+
+      # 2. Устанавливаем Python нужной версии
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+      # 3. Обновляем pip и устанавливаем зависимости и инструменты для тестов
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+      # 4. Проверка качества кода (LINTING)
+    - name: Lint and Format with Ruff
+      run: |
+        # Проверка стиля и ошибок
+        ruff check .
+        # Проверка форматирования
+        ruff format --check .
+
+      # 5. Проверка аннотаций типов (LINTING)
+    #- name: Type check with Mypy
+      #run: mypy .
+
+      # 6. Настраиваем окружение: создаем .env и прописываем туда URL тестовой базы
+    - name: Set up environment
+      run: |
+        cp .env.example .env
+        echo "DATABASE_URL=postgresql+asyncpg://test_user:test_password@localhost:5432/test_db" >> .env
+
+      # 7. Применяем миграции Alembic, чтобы создать таблицы в базе Postgres выше
+    - name: Run migrations (if using Alembic)
+      run: |
+        alembic upgrade head
+
+      # 8. Запускаем тесты с генерацией отчетов о покрытии кода (coverage) и Allure
+    - name: Test with pytest
+      run: |
+        pytest --cov=api --cov=bot --cov-report=xml --alluredir=allure-results
+      env:
+        BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        KINOPOISK_API_KEY: ${{ secrets.KINOPOISK_API_KEY }}
+
+      # 9. Скачиваем историю прошлых тестов из спец. ветки gh-pages для графиков Allure
+    - name: Get Allure history
+      uses: actions/checkout@v2
+      if: always()
+      continue-on-error: true
+      with:
+        ref: gh-pages
+        path: gh-pages
+
+      # 10. Генерируем HTML-отчет из результатов pytest
+    - name: Allure Report action
+      uses: simple-elf/allure-report-action@master
+      if: always()
+      with:
+        allure_results: allure-results
+        allure_history: allure-history
+        keep_reports: 20
+
+      # 11. Публикуем отчет на GitHub Pages, чтобы его можно было открыть по ссылке
+    - name: Deploy Allure report to Github Pages
+      if: always()
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_branch: gh-pages
+        publish_dir: allure-history
+
+#CI/CD (GitHub Actions):
+#| Понятие       | Описание                                           |
+#|---------------|----------------------------------------------------|
+#| Workflow      | Весь процесс (файл .yml), описывающий правила      |
+#| Job (Задание) | Набор шагов ('test'), идет на Linux                |
+#| Step (Шаг)    | Одна команда или действие (Checkout, Install и т.д.)|
+#| Service       | Вспомогательный контейнер (БД PostgreSQL)          |
+#| Secret        | Скрытая переменная (пароли, ключи API)             |

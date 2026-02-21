@@ -39,3 +39,6 @@ secrets.ini
 # Logs
 logs/
 *.log
+
+# Скрипты
+scripts/

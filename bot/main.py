@@ -1,9 +1,7 @@
-import os
 import asyncio
-
-from aiogram.fsm.storage.memory import MemoryStorage
-from dotenv import load_dotenv
+import os
 from aiogram import Bot, Dispatcher
+from dotenv import load_dotenv
 from bot.handlers import router
 from bot.logger import logger
 from bot.middleware import AccessMiddleware
@@ -17,10 +15,10 @@ if not BOT_TOKEN:
 
 # Инициализация
 bot = Bot(token=BOT_TOKEN)
-storage = MemoryStorage()
 dp = Dispatcher()
 # Включаем middleware
 dp.update.middleware(AccessMiddleware())
+
 
 async def main():
     logger.info("=" * 50)
@@ -28,11 +26,12 @@ async def main():
     logger.info("=" * 50)
     # Включаем роутер
     dp.include_router(router)
-    #запускаем постоянный опрос событий
+    # запускаем постоянный опрос событий
     logger.info("Бот инициализирован, запускаю поллинг...")
     await dp.start_polling(bot)
 
-#стандартный запуск асинхронной программы
+
+# стандартный запуск асинхронной программы
 if __name__ == "__main__":
     try:
         asyncio.run(main())

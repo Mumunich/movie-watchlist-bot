@@ -1,0 +1,38 @@
+# Единый файл настроек
+[tool.ruff]
+# Целевая версия Python
+target-version = "py311"
+# Максимальная длина строки (стандарт Black)
+line-length = 88
+
+[tool.ruff.lint]
+# Список правил, которые Ruff будет проверять:
+# E, W — ошибки и ворнинги PEP8
+# F — логические ошибки
+# I — сортировка импортов
+# B — поиск вероятных багов
+# C4 — упрощение кода для коллекций
+# UP — обновление синтаксиса до актуальной версии Python
+select = ["E", "W", "F", "I", "B", "ARG", "C4", "UP"]
+
+# Что игнорировать (обычно это конфликты с форматтером)
+ignore = ["E203", "B008"] # B008 полезен для FastAPI Depends()
+
+[tool.ruff.format]
+# Настройки форматирования
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+
+[tool.mypy]
+# Настройки строгой проверки типов
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+# Чтобы mypy дружил с Pydantic v2
+plugins = ["pydantic.mypy"]
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
