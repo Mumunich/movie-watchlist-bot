@@ -1,0 +1,22 @@
+2026-02-23 16:03:36,912 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-02-23 16:03:36,915 INFO sqlalchemy.engine.Engine SELECT movies.id, movies.title, movies.description, movies.year, movies.kp_id, movies.poster_url, movies.rating, movies.type, movies.genres, movies.watched, movies.created_at 
+FROM movies 
+WHERE movies.kp_id = ?
+2026-02-23 16:03:36,915 INFO sqlalchemy.engine.Engine [cached since 0.04976s ago] (301,)
+2026-02-23 16:03:36,916 INFO sqlalchemy.engine.Engine INSERT INTO movies (title, description, year, kp_id, poster_url, rating, type, genres, watched, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2026-02-23 16:03:36,916 INFO sqlalchemy.engine.Engine [cached since 0.04853s ago] ('Матрица', None, 1999, 301, 'https://example.com/poster.jpg', 8.7, 'movie', 'фантастика, боевик', 0, '2026-02-23 16:03:36.916482')
+2026-02-23 16:03:36,917 INFO sqlalchemy.engine.Engine SELECT movies.id, movies.title, movies.description, movies.year, movies.kp_id, movies.poster_url, movies.rating, movies.type, movies.genres, movies.watched, movies.created_at 
+FROM movies 
+WHERE movies.id = ?
+2026-02-23 16:03:36,918 INFO sqlalchemy.engine.Engine [cached since 0.0475s ago] (1,)
+2026-02-23 16:03:36,921 INFO sqlalchemy.engine.Engine SELECT movies.id, movies.title, movies.description, movies.year, movies.kp_id, movies.poster_url, movies.rating, movies.type, movies.genres, movies.watched, movies.created_at 
+FROM movies 
+WHERE movies.id = ?
+2026-02-23 16:03:36,921 INFO sqlalchemy.engine.Engine [cached since 0.01688s ago] (1,)
+2026-02-23 16:03:36,923 INFO sqlalchemy.engine.Engine UPDATE movies SET watched=? WHERE movies.id = ?
+2026-02-23 16:03:36,923 INFO sqlalchemy.engine.Engine [generated in 0.00021s] (1, 1)
+2026-02-23 16:03:36,925 INFO sqlalchemy.engine.Engine SELECT movies.id, movies.title, movies.description, movies.year, movies.kp_id, movies.poster_url, movies.rating, movies.type, movies.genres, movies.watched, movies.created_at 
+FROM movies 
+WHERE movies.id = ?
+2026-02-23 16:03:36,925 INFO sqlalchemy.engine.Engine [cached since 0.05471s ago] (1,)
+2026-02-23 16:03:36,928 INFO sqlalchemy.engine.Engine ROLLBACK

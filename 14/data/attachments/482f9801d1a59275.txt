@@ -1,0 +1,16 @@
+2026-02-23 16:03:36,895 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-02-23 16:03:36,898 INFO sqlalchemy.engine.Engine SELECT movies.id, movies.title, movies.description, movies.year, movies.kp_id, movies.poster_url, movies.rating, movies.type, movies.genres, movies.watched, movies.created_at 
+FROM movies 
+WHERE movies.kp_id = ?
+2026-02-23 16:03:36,898 INFO sqlalchemy.engine.Engine [cached since 0.03287s ago] (301,)
+2026-02-23 16:03:36,899 INFO sqlalchemy.engine.Engine INSERT INTO movies (title, description, year, kp_id, poster_url, rating, type, genres, watched, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2026-02-23 16:03:36,899 INFO sqlalchemy.engine.Engine [cached since 0.03162s ago] ('Матрица', None, 1999, 301, 'https://example.com/poster.jpg', 8.7, 'movie', 'фантастика, боевик', 0, '2026-02-23 16:03:36.899593')
+2026-02-23 16:03:36,900 INFO sqlalchemy.engine.Engine SELECT movies.id, movies.title, movies.description, movies.year, movies.kp_id, movies.poster_url, movies.rating, movies.type, movies.genres, movies.watched, movies.created_at 
+FROM movies 
+WHERE movies.id = ?
+2026-02-23 16:03:36,901 INFO sqlalchemy.engine.Engine [cached since 0.03056s ago] (1,)
+2026-02-23 16:03:36,904 INFO sqlalchemy.engine.Engine SELECT movies.id, movies.title, movies.description, movies.year, movies.kp_id, movies.poster_url, movies.rating, movies.type, movies.genres, movies.watched, movies.created_at 
+FROM movies 
+WHERE movies.id = ?
+2026-02-23 16:03:36,905 INFO sqlalchemy.engine.Engine [generated in 0.00019s] (1,)
+2026-02-23 16:03:36,909 INFO sqlalchemy.engine.Engine ROLLBACK

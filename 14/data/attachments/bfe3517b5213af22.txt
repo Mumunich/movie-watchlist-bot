@@ -1,0 +1,5 @@
+2026-02-23 16:03:36,952 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-02-23 16:03:36,956 INFO sqlalchemy.engine.Engine SELECT users.id, users.telegram_id, users.username, users.is_active, users.is_admin, users.created_at 
+FROM users ORDER BY users.created_at DESC
+2026-02-23 16:03:36,956 INFO sqlalchemy.engine.Engine [generated in 0.00021s] ()
+2026-02-23 16:03:36,960 INFO sqlalchemy.engine.Engine ROLLBACK

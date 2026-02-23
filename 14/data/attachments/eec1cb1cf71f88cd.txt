@@ -1,0 +1,6 @@
+INFO     sqlalchemy.engine.Engine:base.py:2710 BEGIN (implicit)
+INFO     sqlalchemy.engine.Engine:base.py:1846 SELECT movies.id, movies.title, movies.description, movies.year, movies.kp_id, movies.poster_url, movies.rating, movies.type, movies.genres, movies.watched, movies.created_at 
+FROM movies
+ LIMIT ? OFFSET ?
+INFO     sqlalchemy.engine.Engine:base.py:1846 [generated in 0.00023s] (100, 0)
+INFO     sqlalchemy.engine.Engine:base.py:2713 ROLLBACK

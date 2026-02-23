@@ -1,0 +1,1 @@
+INFO     movie_bot:handlers.py:73 Команда /start от пользователя: 12345 (@друг)
