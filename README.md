@@ -91,15 +91,22 @@ mypy .
 ```
 
 ## 💾 Бэкап и Восстановление
-Для обеспечения сохранности данных используйте команды pg_dump (внутри Docker или локально):
-### 1. Создание бэкапа
+Перейдите в папку, куда хотите сохранить архив, и выполните:
 ```bash
-docker exec -t movie_bot_db pg_dumpall -c -U postgres > backup_$(date +%Y-%m-%d).sql
+vbart backup movie_bot_data
 ```
-### 2. Восстановление
+Будет создан файл вида YYYYMMDD-movie_bot_data-backup.xz в текущей директории.
+### Восстановление из бэкапа
+Перед восстановлением остановите контейнеры, использующие том:
+
 ```bash
-cat backup_file.sql | docker exec -i movie_bot_db psql -U postgres
+docker-compose stop
 ```
+Затем выполните:
+```bash
+vbart restore YYYYMMDD-movie_bot_data-backup.xz movie_bot_data_restored
+```
+
 
 ## 📖 Документация API
 После запуска бэкенда интерактивная документация доступна по адресам:

@@ -6,7 +6,7 @@ services:
   db:
     image: postgres:17-alpine
     container_name: movie_db_container
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -32,7 +32,7 @@ services:
     # Сбор образ из Dockerfile в текущей папке
     build: .
     container_name: movie_api_container
-    restart: always
+    restart: unless-stopped
     # Проброс порта
     ports:
       - "8000:8000"
@@ -66,7 +66,7 @@ services:
   bot:
     build: .
     container_name: movie_bot_container
-    restart: always
+    restart: unless-stopped
     depends_on:
       # Ожидаем когда запустится Api
       api:
