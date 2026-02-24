@@ -112,6 +112,7 @@ vbart restore YYYYMMDD-movie_bot_data-backup.xz movie_bot_data_restored
 После запуска бэкенда интерактивная документация доступна по адресам:
 *   **Swagger UI**: http://localhost:8000/docs
 *   **ReDoc**: http://localhost:8000/redoc
+*   **Kinopoisk api**: https://api.poiskkino.dev/documentation#/
 
 ## 🤖 CI/CD Pipeline
 В репозитории настроен GitHub Actions (.github/workflows/ci.yml), который при каждом пуше:
