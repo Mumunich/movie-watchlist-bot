@@ -1,0 +1,27 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"GET /users/me должен вернуть данные тестового пользователя (админа).","2","Получение информации о текущем пользователе","tests.test_api","Tue Feb 24 15:45:24 UTC 2026","passed","Tue Feb 24 15:45:24 UTC 2026","","test_users","",""
+"Попытка создать пользователя с существующим ID должна вернуть ошибку 400.","8","Создание пользователя с уже существующим telegram_id","tests.test_api","Tue Feb 24 15:45:24 UTC 2026","passed","Tue Feb 24 15:45:24 UTC 2026","","test_users","",""
+"Должен вернуться корректный фильм.","11","Получение фильма по существующему ID","tests.test_api","Tue Feb 24 15:45:24 UTC 2026","passed","Tue Feb 24 15:45:24 UTC 2026","TestMovieGet","test_movies","",""
+"POST /auth/setup должен вернуть 403, если пользователи уже существуют.","9","Повторная регистрация после первого пользователя","tests.test_api","Tue Feb 24 15:45:24 UTC 2026","passed","Tue Feb 24 15:45:24 UTC 2026","","test_auth","",""
+"DELETE /movies/{id} должен удалить фильм.","14","Удаление фильма","tests.test_api","Tue Feb 24 15:45:24 UTC 2026","passed","Tue Feb 24 15:45:24 UTC 2026","TestMovieDelete","test_movies","",""
+"POST /auth/setup должен создать админа и вернуть его данные.","25","Регистрация первого пользователя","tests.test_api","Tue Feb 24 15:45:24 UTC 2026","passed","Tue Feb 24 15:45:24 UTC 2026","","test_auth","",""
+"POST /users/ должен создать неактивного пользователя (не админа).","8","Создание обычного пользователя (админом)","tests.test_api","Tue Feb 24 15:45:24 UTC 2026","passed","Tue Feb 24 15:45:24 UTC 2026","","test_users","",""
+"Проверяем, что при отсутствии фильмов возвращается пустой массив.","7","Получение списка фильмов, когда БД пуста","tests.test_api","Tue Feb 24 15:45:24 UTC 2026","passed","Tue Feb 24 15:45:24 UTC 2026","TestMovieList","test_movies","",""
+"GET /auth/setup/status должен показывать, что setup выполнен.","10","Проверка статуса setup после регистрации","tests.test_api","Tue Feb 24 15:45:24 UTC 2026","passed","Tue Feb 24 15:45:24 UTC 2026","","test_auth","",""
+"При наличии фильмов бот выводит их с эмодзи и статусом просмотра.","2","📋 Список фильмов — непустой список","tests.test_bot","Tue Feb 24 15:45:24 UTC 2026","passed","Tue Feb 24 15:45:24 UTC 2026","","test_handlers","",""
+"
+    Проверяет цепочку:
+    1. Создаём фильм через API.
+    2. Вызываем хендлер бота handle_list_button.
+    3. Бот через api_client обращается к тестовому API.
+    4. Проверяем, что бот отправил сообщение с названием фильма.
+","0","Интеграционный тест: бот запрашивает список фильмов после создания через API","tests.test_integration","Tue Feb 24 15:45:24 UTC 2026","skipped","Tue Feb 24 15:45:24 UTC 2026","","test_bot_vs_api","",""
+"GET /auth/setup/status должен показывать, что setup не выполнен.","3","Проверка статуса setup до регистрации","tests.test_api","Tue Feb 24 15:45:24 UTC 2026","passed","Tue Feb 24 15:45:24 UTC 2026","","test_auth","",""
+"PATCH /movies/{id} должен обновить поле watched.","13","Обновление фильма (отметка о просмотре)","tests.test_api","Tue Feb 24 15:45:24 UTC 2026","passed","Tue Feb 24 15:45:24 UTC 2026","TestMovieUpdate","test_movies","",""
+"Если фильмов нет, бот сообщает об этом.","2","📋 Список фильмов — пустой список","tests.test_bot","Tue Feb 24 15:45:24 UTC 2026","passed","Tue Feb 24 15:45:24 UTC 2026","","test_handlers","",""
+"GET /users/ должен вернуть пустой массив, если в БД нет пользователей.","4","Получение списка пользователей, когда их нет","tests.test_api","Tue Feb 24 15:45:24 UTC 2026","passed","Tue Feb 24 15:45:24 UTC 2026","","test_users","",""
+"При первом запуске бота должен создаться админ через API.","4","/start для первого пользователя","tests.test_bot","Tue Feb 24 15:45:24 UTC 2026","passed","Tue Feb 24 15:45:24 UTC 2026","","test_handlers","",""
+"Проверяем успешное создание фильма с корректными данными.","13","Создание нового фильма","tests.test_api","Tue Feb 24 15:45:24 UTC 2026","passed","Tue Feb 24 15:45:24 UTC 2026","TestMovieCreate","test_movies","",""
+"Должна вернуться ошибка 400.","9","Создание фильма с уже существующим kp_id","tests.test_api","Tue Feb 24 15:45:24 UTC 2026","passed","Tue Feb 24 15:45:24 UTC 2026","TestMovieCreate","test_movies","",""
+"При нажатии кнопки бот запрашивает название и переводит FSM в состояние waiting_for_title.","3","➕ Добавить — переход в состояние ожидания названия","tests.test_bot","Tue Feb 24 15:45:24 UTC 2026","passed","Tue Feb 24 15:45:24 UTC 2026","","test_handlers","",""
+"Если пользователь уже есть в системе, бот показывает приветствие.","3","/start для существующего активного пользователя","tests.test_bot","Tue Feb 24 15:45:24 UTC 2026","passed","Tue Feb 24 15:45:24 UTC 2026","","test_handlers","",""

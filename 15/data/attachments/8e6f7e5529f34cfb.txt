@@ -1,0 +1,2 @@
+INFO     sqlalchemy.engine.Engine:base.py:2710 BEGIN (implicit)
+INFO     sqlalchemy.engine.Engine:base.py:2713 ROLLBACK

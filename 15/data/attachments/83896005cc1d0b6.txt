@@ -1,0 +1,109 @@
+2026-02-24 15:45:24,068 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-02-24 15:45:24,069 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("movies")
+2026-02-24 15:45:24,069 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-02-24 15:45:24,070 INFO sqlalchemy.engine.Engine PRAGMA temp.table_info("movies")
+2026-02-24 15:45:24,070 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-02-24 15:45:24,071 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("genres")
+2026-02-24 15:45:24,071 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-02-24 15:45:24,071 INFO sqlalchemy.engine.Engine PRAGMA temp.table_info("genres")
+2026-02-24 15:45:24,071 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-02-24 15:45:24,072 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("types")
+2026-02-24 15:45:24,072 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-02-24 15:45:24,073 INFO sqlalchemy.engine.Engine PRAGMA temp.table_info("types")
+2026-02-24 15:45:24,073 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-02-24 15:45:24,074 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("users")
+2026-02-24 15:45:24,074 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-02-24 15:45:24,075 INFO sqlalchemy.engine.Engine PRAGMA temp.table_info("users")
+2026-02-24 15:45:24,075 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-02-24 15:45:24,076 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("movies")
+2026-02-24 15:45:24,076 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-02-24 15:45:24,076 INFO sqlalchemy.engine.Engine PRAGMA temp.table_info("movies")
+2026-02-24 15:45:24,077 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-02-24 15:45:24,077 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("genres")
+2026-02-24 15:45:24,077 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-02-24 15:45:24,078 INFO sqlalchemy.engine.Engine PRAGMA temp.table_info("genres")
+2026-02-24 15:45:24,078 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-02-24 15:45:24,079 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("types")
+2026-02-24 15:45:24,079 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-02-24 15:45:24,080 INFO sqlalchemy.engine.Engine PRAGMA temp.table_info("types")
+2026-02-24 15:45:24,080 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-02-24 15:45:24,080 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("users")
+2026-02-24 15:45:24,080 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-02-24 15:45:24,081 INFO sqlalchemy.engine.Engine PRAGMA temp.table_info("users")
+2026-02-24 15:45:24,081 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-02-24 15:45:24,083 INFO sqlalchemy.engine.Engine 
+CREATE TABLE movies (
+	id INTEGER NOT NULL, 
+	title VARCHAR NOT NULL, 
+	description VARCHAR, 
+	year INTEGER, 
+	kp_id INTEGER, 
+	poster_url VARCHAR, 
+	rating FLOAT, 
+	type VARCHAR NOT NULL, 
+	genres VARCHAR NOT NULL, 
+	watched BOOLEAN, 
+	created_at DATETIME, 
+	PRIMARY KEY (id)
+)
+
+
+2026-02-24 15:45:24,083 INFO sqlalchemy.engine.Engine [no key 0.00015s] ()
+2026-02-24 15:45:24,087 INFO sqlalchemy.engine.Engine CREATE UNIQUE INDEX ix_movies_kp_id ON movies (kp_id)
+2026-02-24 15:45:24,087 INFO sqlalchemy.engine.Engine [no key 0.00014s] ()
+2026-02-24 15:45:24,089 INFO sqlalchemy.engine.Engine CREATE INDEX ix_movies_id ON movies (id)
+2026-02-24 15:45:24,089 INFO sqlalchemy.engine.Engine [no key 0.00019s] ()
+2026-02-24 15:45:24,092 INFO sqlalchemy.engine.Engine 
+CREATE TABLE genres (
+	id INTEGER NOT NULL, 
+	name VARCHAR NOT NULL, 
+	slug VARCHAR NOT NULL, 
+	PRIMARY KEY (id), 
+	UNIQUE (name), 
+	UNIQUE (slug)
+)
+
+
+2026-02-24 15:45:24,092 INFO sqlalchemy.engine.Engine [no key 0.00021s] ()
+2026-02-24 15:45:24,094 INFO sqlalchemy.engine.Engine 
+CREATE TABLE types (
+	id INTEGER NOT NULL, 
+	name VARCHAR NOT NULL, 
+	slug VARCHAR NOT NULL, 
+	PRIMARY KEY (id), 
+	UNIQUE (name), 
+	UNIQUE (slug)
+)
+
+
+2026-02-24 15:45:24,094 INFO sqlalchemy.engine.Engine [no key 0.00014s] ()
+2026-02-24 15:45:24,096 INFO sqlalchemy.engine.Engine 
+CREATE TABLE users (
+	id INTEGER NOT NULL, 
+	telegram_id INTEGER NOT NULL, 
+	username VARCHAR(100), 
+	is_active BOOLEAN, 
+	is_admin BOOLEAN, 
+	created_at DATETIME, 
+	PRIMARY KEY (id), 
+	UNIQUE (telegram_id)
+)
+
+
+2026-02-24 15:45:24,096 INFO sqlalchemy.engine.Engine [no key 0.00014s] ()
+2026-02-24 15:45:24,098 INFO sqlalchemy.engine.Engine COMMIT
+2026-02-24 15:45:24,099 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-02-24 15:45:24,116 INFO sqlalchemy.engine.Engine SELECT users.id, users.telegram_id, users.username, users.is_active, users.is_admin, users.created_at 
+FROM users
+2026-02-24 15:45:24,116 INFO sqlalchemy.engine.Engine [generated in 0.00026s] ()
+2026-02-24 15:45:24,119 INFO sqlalchemy.engine.Engine SELECT users.id, users.telegram_id, users.username, users.is_active, users.is_admin, users.created_at 
+FROM users 
+WHERE users.telegram_id = ?
+2026-02-24 15:45:24,119 INFO sqlalchemy.engine.Engine [generated in 0.00023s] (999,)
+2026-02-24 15:45:24,121 INFO sqlalchemy.engine.Engine INSERT INTO users (telegram_id, username, is_active, is_admin, created_at) VALUES (?, ?, ?, ?, ?)
+2026-02-24 15:45:24,121 INFO sqlalchemy.engine.Engine [generated in 0.00025s] (999, 'first_user', 1, 1, '2026-02-24 15:45:24.120003')
+2026-02-24 15:45:24,124 INFO sqlalchemy.engine.Engine SELECT users.id, users.telegram_id, users.username, users.is_active, users.is_admin, users.created_at 
+FROM users 
+WHERE users.id = ?
+2026-02-24 15:45:24,124 INFO sqlalchemy.engine.Engine [generated in 0.00020s] (1,)
+2026-02-24 15:45:24,129 INFO sqlalchemy.engine.Engine ROLLBACK

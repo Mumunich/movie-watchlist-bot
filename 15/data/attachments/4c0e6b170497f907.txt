@@ -1,0 +1,16 @@
+INFO     sqlalchemy.engine.Engine:base.py:2710 BEGIN (implicit)
+INFO     sqlalchemy.engine.Engine:base.py:1846 SELECT users.id, users.telegram_id, users.username, users.is_active, users.is_admin, users.created_at 
+FROM users 
+WHERE users.telegram_id = ?
+INFO     sqlalchemy.engine.Engine:base.py:1846 [cached since 0.1869s ago] (123456,)
+INFO     sqlalchemy.engine.Engine:base.py:1846 INSERT INTO users (telegram_id, username, is_active, is_admin, created_at) VALUES (?, ?, ?, ?, ?)
+INFO     sqlalchemy.engine.Engine:base.py:1846 [cached since 0.01211s ago] (123456, 'new_user', 0, 0, '2026-02-24 15:45:24.306843')
+INFO     sqlalchemy.engine.Engine:base.py:1846 SELECT users.id, users.telegram_id, users.username, users.is_active, users.is_admin, users.created_at 
+FROM users 
+WHERE users.id = ?
+INFO     sqlalchemy.engine.Engine:base.py:1846 [cached since 0.1837s ago] (1,)
+INFO     sqlalchemy.engine.Engine:base.py:1846 SELECT users.id, users.telegram_id, users.username, users.is_active, users.is_admin, users.created_at 
+FROM users 
+WHERE users.telegram_id = ?
+INFO     sqlalchemy.engine.Engine:base.py:1846 [cached since 0.1919s ago] (123456,)
+INFO     sqlalchemy.engine.Engine:base.py:2713 ROLLBACK

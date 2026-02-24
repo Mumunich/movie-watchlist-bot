@@ -1,0 +1,6 @@
+2026-02-24 15:45:24,174 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-02-24 15:45:24,180 INFO sqlalchemy.engine.Engine SELECT movies.id, movies.title, movies.description, movies.year, movies.kp_id, movies.poster_url, movies.rating, movies.type, movies.genres, movies.watched, movies.created_at 
+FROM movies
+ LIMIT ? OFFSET ?
+2026-02-24 15:45:24,181 INFO sqlalchemy.engine.Engine [generated in 0.00023s] (100, 0)
+2026-02-24 15:45:24,184 INFO sqlalchemy.engine.Engine ROLLBACK

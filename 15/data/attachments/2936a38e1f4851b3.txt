@@ -1,0 +1,22 @@
+INFO     sqlalchemy.engine.Engine:base.py:2710 BEGIN (implicit)
+INFO     sqlalchemy.engine.Engine:base.py:1846 SELECT movies.id, movies.title, movies.description, movies.year, movies.kp_id, movies.poster_url, movies.rating, movies.type, movies.genres, movies.watched, movies.created_at 
+FROM movies 
+WHERE movies.kp_id = ?
+INFO     sqlalchemy.engine.Engine:base.py:1846 [cached since 0.06911s ago] (301,)
+INFO     sqlalchemy.engine.Engine:base.py:1846 INSERT INTO movies (title, description, year, kp_id, poster_url, rating, type, genres, watched, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+INFO     sqlalchemy.engine.Engine:base.py:1846 [cached since 0.06795s ago] ('Матрица', None, 1999, 301, 'https://example.com/poster.jpg', 8.7, 'movie', 'фантастика, боевик', 0, '2026-02-24 15:45:24.262337')
+INFO     sqlalchemy.engine.Engine:base.py:1846 SELECT movies.id, movies.title, movies.description, movies.year, movies.kp_id, movies.poster_url, movies.rating, movies.type, movies.genres, movies.watched, movies.created_at 
+FROM movies 
+WHERE movies.id = ?
+INFO     sqlalchemy.engine.Engine:base.py:1846 [cached since 0.06696s ago] (1,)
+INFO     sqlalchemy.engine.Engine:base.py:1846 SELECT movies.id, movies.title, movies.description, movies.year, movies.kp_id, movies.poster_url, movies.rating, movies.type, movies.genres, movies.watched, movies.created_at 
+FROM movies 
+WHERE movies.id = ?
+INFO     sqlalchemy.engine.Engine:base.py:1846 [cached since 0.0364s ago] (1,)
+INFO     sqlalchemy.engine.Engine:base.py:1846 DELETE FROM movies WHERE movies.id = ?
+INFO     sqlalchemy.engine.Engine:base.py:1846 [generated in 0.00019s] (1,)
+INFO     sqlalchemy.engine.Engine:base.py:1846 SELECT movies.id, movies.title, movies.description, movies.year, movies.kp_id, movies.poster_url, movies.rating, movies.type, movies.genres, movies.watched, movies.created_at 
+FROM movies 
+WHERE movies.id = ?
+INFO     sqlalchemy.engine.Engine:base.py:1846 [cached since 0.04078s ago] (1,)
+INFO     sqlalchemy.engine.Engine:base.py:2713 ROLLBACK

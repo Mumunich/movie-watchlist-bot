@@ -1,0 +1,16 @@
+INFO     sqlalchemy.engine.Engine:base.py:2710 BEGIN (implicit)
+INFO     sqlalchemy.engine.Engine:base.py:1846 SELECT movies.id, movies.title, movies.description, movies.year, movies.kp_id, movies.poster_url, movies.rating, movies.type, movies.genres, movies.watched, movies.created_at 
+FROM movies 
+WHERE movies.kp_id = ?
+INFO     sqlalchemy.engine.Engine:base.py:1846 [generated in 0.00022s] (301,)
+INFO     sqlalchemy.engine.Engine:base.py:1846 INSERT INTO movies (title, description, year, kp_id, poster_url, rating, type, genres, watched, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+INFO     sqlalchemy.engine.Engine:base.py:1846 [generated in 0.00030s] ('Матрица', None, 1999, 301, 'https://example.com/poster.jpg', 8.7, 'movie', 'фантастика, боевик', 0, '2026-02-24 15:45:24.194623')
+INFO     sqlalchemy.engine.Engine:base.py:1846 SELECT movies.id, movies.title, movies.description, movies.year, movies.kp_id, movies.poster_url, movies.rating, movies.type, movies.genres, movies.watched, movies.created_at 
+FROM movies 
+WHERE movies.id = ?
+INFO     sqlalchemy.engine.Engine:base.py:1846 [generated in 0.00021s] (1,)
+INFO     sqlalchemy.engine.Engine:base.py:1846 SELECT movies.id, movies.title, movies.description, movies.year, movies.kp_id, movies.poster_url, movies.rating, movies.type, movies.genres, movies.watched, movies.created_at 
+FROM movies
+ LIMIT ? OFFSET ?
+INFO     sqlalchemy.engine.Engine:base.py:1846 [cached since 0.01954s ago] (100, 0)
+INFO     sqlalchemy.engine.Engine:base.py:2713 ROLLBACK

@@ -1,0 +1,2 @@
+INFO     movie_bot:handlers.py:73 Команда /start от пользователя: 12345 (@друг)
+INFO     movie_bot:handlers.py:116 ✅ Первый пользователь создан через /auth/setup: 12345

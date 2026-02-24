@@ -1,0 +1,5 @@
+INFO     sqlalchemy.engine.Engine:base.py:2710 BEGIN (implicit)
+INFO     sqlalchemy.engine.Engine:base.py:1846 SELECT users.id, users.telegram_id, users.username, users.is_active, users.is_admin, users.created_at 
+FROM users
+INFO     sqlalchemy.engine.Engine:base.py:1846 [cached since 0.03641s ago] ()
+INFO     sqlalchemy.engine.Engine:base.py:2713 ROLLBACK
